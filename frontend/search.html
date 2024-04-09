@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Log Viewer</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+
+  <body>
+    <h1>Log Viewer</h1>
+
+    <!-- Dropdowns for filters -->
+    <div class="filter-container">
+      <label for="level">Log Level:</label>
+      <select id="level">
+        <option value="">All</option>
+        <option value="info">Info</option>
+        <option value="warning">Warning</option>
+        <option value="error">Error</option>
+      </select>
+      <div class="input-field">
+        <label for="timestamp">Timestamp:</label>
+        <input type="text" id="timestamp" placeholder="YYYY-MM-DDTHH:mm:ssZ" />
+      </div>
+
+      <div class="input-field">
+        <label for="message">Message:</label>
+        <input type="text" id="message" placeholder="Enter message" />
+      </div>
+
+      <div class="input-field">
+        <label for="resourceId">Resource ID:</label>
+        <input type="text" id="resourceId" placeholder="Enter resource ID" />
+      </div>
+
+      <div class="input-field">
+        <label for="traceId">Trace ID:</label>
+        <input type="text" id="traceId" placeholder="Enter trace ID" />
+      </div>
+      <div class="input-field">
+        <label for="spanId">Span ID:</label>
+        <input type="text" id="spanId" placeholder="Enter span ID" />
+      </div>
+      <div class="input-field">
+        <label for="commit">Commit:</label>
+        <input type="text" id="commit" placeholder="Enter commit" />
+      </div>
+      <div class="input-field">
+        <label for="parentResourceId">Parent Resource ID:</label>
+        <input
+          type="text"
+          id="parentResourceId"
+          placeholder="Enter parent resource ID"
+        />
+      </div>
+      <div class="input-field">
+        <label for="startTimestamp">Start Timestamp:</label>
+        <input
+          type="text"
+          id="startTimestamp"
+          placeholder="YYYY-MM-DDTHH:mm:ssZ"
+        />
+      </div>
+
+      <div class="input-field">
+        <label for="endTimestamp">End Timestamp:</label>
+        <input
+          type="text"
+          id="endTimestamp"
+          placeholder="YYYY-MM-DDTHH:mm:ssZ"
+        />
+      </div>
+    </div>
+
+    <!-- Button to trigger the request -->
+    <button onclick="getLogs()">Get Logs</button>
+    
+    <div id="pageCounter">Page 1 of 1</div>
+    <!-- Table for displaying logs -->
+    <table id="logsTable">
+      <thead>
+        <tr>
+          <th>Level</th>
+          <th>Message</th>
+          <th>Timestamp</th>
+          <th>ResourceId</th>
+          <th>TraceId</th>
+          <th>SpanId</th>
+          <th>Commit</th>
+          <th>parentResourceId</th>
+        </tr>
+      </thead>
+      <tbody id="logsBody"></tbody>
+    </table>
+
+    <button id="prevButton" onclick="previousPage()">Previous Page</button>
+    <button id="nextButton" onclick="nextPage()">Next Page</button>
+
+    <script src="search_app.js"></script>
+  </body>
+</html>

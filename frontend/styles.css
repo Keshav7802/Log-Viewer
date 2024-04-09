@@ -1,0 +1,60 @@
+#logsTable {
+    table-layout: fixed;
+    /* Fix the table layout */
+    width: 100%;
+    /* Set a fixed width */
+    margin-top: 20px;
+}
+
+#pageCounter {
+    margin-top: 10px;
+}
+
+#logsTable th,
+#logsTable td {
+    border: 1px solid #ddd;
+    width: 30%;
+    padding: 8px;
+    text-align: left;
+    overflow: hidden;
+    /* Hide overflow content */
+    white-space: nowrap;
+    /* Prevent text wrapping */
+}
+
+#logsTable th {
+    background-color: #f2f2f2;
+}
+
+.filter-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+label {
+    margin-right: 10px;
+}
+
+/* Style for filter input fields */
+input {
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+/* Style for the Get Logs button */
+button {
+    padding: 8px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#prevButton,
+#nextButton {
+    background-color: rgb(195, 70, 70);
+    visibility: hidden;
+}

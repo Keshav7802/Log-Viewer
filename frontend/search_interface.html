@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Log Viewer</title>
+    <style>
+      #logsTable {
+        table-layout: fixed; /* Fix the table layout */
+        width: 100%; /* Set a fixed width */
+        margin-top: 20px;
+      }
+
+      #logsTable th,
+      #logsTable td {
+        border: 1px solid #ddd;
+        width: 30%;
+        padding: 8px;
+        text-align: left;
+        overflow: hidden; /* Hide overflow content */
+        white-space: nowrap; /* Prevent text wrapping */
+      }
+
+      #logsTable th {
+        background-color: #f2f2f2;
+      }
+
+      .filter-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      label {
+        margin-right: 10px;
+      }
+
+      /* Style for filter input fields */
+      input {
+        padding: 5px;
+        margin-bottom: 10px;
+      }
+
+      /* Style for the Get Logs button */
+      button {
+        padding: 8px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Log Viewer</h1>
+
+    <!-- Dropdowns for filters -->
+    <div class="filter-container">
+      <label for="level">Log Level:</label>
+      <select id="level">
+        <option value="">All</option>
+        <option value="info">Info</option>
+        <option value="warning">Warning</option>
+        <option value="error">Error</option>
+      </select>
+      <div class="input-field">
+        <label for="timestamp">Timestamp:</label>
+        <input type="text" id="timestamp" placeholder="YYYY-MM-DDTHH:mm:ssZ" />
+      </div>
+
+      <div class="input-field">
+        <label for="message">Message:</label>
+        <input type="text" id="message" placeholder="Enter message" />
+      </div>
+
+      <div class="input-field">
+        <label for="resourceId">Resource ID:</label>
+        <input type="text" id="resourceId" placeholder="Enter resource ID" />
+      </div>
+
+      <div class="input-field">
+        <label for="traceId">Trace ID:</label>
+        <input type="text" id="traceId" placeholder="Enter trace ID" />
+      </div>
+      <div class="input-field">
+        <label for="spanId">Span ID:</label>
+        <input type="text" id="spanId" placeholder="Enter span ID" />
+      </div>
+      <div class="input-field">
+        <label for="commit">Commit:</label>
+        <input type="text" id="commit" placeholder="Enter commit" />
+      </div>
+      <div class="input-field">
+        <label for="parentResourceId">Parent Resource ID:</label>
+        <input
+          type="text"
+          id="parentResourceId"
+          placeholder="Enter parent resource ID"
+        />
+      </div>
+      <div class="input-field">
+        <label for="startTimestamp">Start Timestamp:</label>
+        <input
+          type="text"
+          id="startTimestamp"
+          placeholder="YYYY-MM-DDTHH:mm:ssZ"
+        />
+      </div>
+
+      <div class="input-field">
+        <label for="endTimestamp">End Timestamp:</label>
+        <input
+          type="text"
+          id="endTimestamp"
+          placeholder="YYYY-MM-DDTHH:mm:ssZ"
+        />
+      </div>
+    </div>
+
+    <!-- Button to trigger the request -->
+    <button onclick="getLogs()">Get Logs</button>
+
+    <!-- Table for displaying logs -->
+    <table id="logsTable">
+      <thead>
+        <tr>
+          <th>Level</th>
+          <th>Message</th>
+          <th>Timestamp</th>
+          <th>ResourceId</th>
+          <th>TraceId</th>
+          <th>SpanId</th>
+          <th>Commit</th>
+          <th>parentResourceId</th>
+        </tr>
+      </thead>
+      <tbody id="logsBody"></tbody>
+    </table>
+
+    <script>
+      function getLogs() {
+        const level = document.getElementById("level").value;
+        const message = document.getElementById("message").value;
+        const resourceId = document.getElementById("resourceId").value;
+        const timestamp = document.getElementById("timestamp").value;
+        const traceId = document.getElementById("traceId").value;
+        const spanId = document.getElementById("spanId").value;
+        const commit = document.getElementById("commit").value;
+        const parentResourceId =
+          document.getElementById("parentResourceId").value;
+        const startTimestamp = document.getElementById("startTimestamp").value;
+        const endTimestamp = document.getElementById("endTimestamp").value;
+
+        let url = `http://127.0.0.1:3000/logs?`;
+        if (level) url += `level=${level}&`;
+        if (message) url += `message=${message}&`;
+        if (resourceId) url += `resourceId=${resourceId}&`;
+        if (timestamp) url += `timestamp=${timestamp}&`;
+        if (traceId) url += `traceId=${traceId}&`;
+        if (spanId) url += `spanId=${spanId}&`;
+        if (commit) url += `commit=${commit}&`;
+        if (parentResourceId) url += `parentResourceId=${parentResourceId}&`;
+        if (startTimestamp) url += `startTimestamp=${startTimestamp}&`;
+        if (endTimestamp) url += `endTimestamp=${endTimestamp}&`;
+
+        fetch(url)
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data); // Log received data
+
+            // Check if 'logs' property exists in the data object
+            if (data && Array.isArray(data)) {
+              const logsTable = document.getElementById("logsTable");
+              const logsBody = document.getElementById("logsBody");
+
+              logsBody.innerHTML = "";
+
+              data.forEach((log) => {
+                console.log("Log:", log); // Log each log object
+
+                const row = logsBody.insertRow();
+                const cellLevel = row.insertCell(0);
+                const cellMessage = row.insertCell(1);
+                const cellTimestamp = row.insertCell(2);
+                const cellResourceId = row.insertCell(3);
+                const cellTraceId = row.insertCell(4);
+                const cellSpanId = row.insertCell(5);
+                const cellCommit = row.insertCell(6);
+                const cellParentResourceId = row.insertCell(7);
+
+                cellLevel.innerHTML = log.level;
+                cellMessage.innerHTML = log.message;
+                cellTimestamp.innerHTML = log.timestamp;
+                cellResourceId.innerHTML = log.resourceId;
+                cellTraceId.innerHTML = log.traceId;
+                cellSpanId.innerHTML = log.spanId;
+                cellCommit.innerHTML = log.commit;
+                cellParentResourceId.innerHTML = log.parentResourceId;
+              });
+
+              logsTable.style.display = "block";
+              console.log("Table display:", logsTable.style.display);
+            } else {
+              console.error("Invalid data format:", data);
+            }
+          })
+          .catch((error) => console.error("Error:", error));
+      }
+    </script>
+  </body>
+</html>
